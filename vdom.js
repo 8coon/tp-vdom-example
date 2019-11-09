@@ -1,3 +1,4 @@
+'use strict';
 
 class Component {
 	constructor(attrs, children) {
@@ -44,6 +45,8 @@ function create(vnode) {
 
 		// Создаём DOM по шаблону
 		const node = create(componentVnode);
+		// Записываем ссылку на элемент в компонент
+		vnode._instance.el = node;
 
 		// Сохраняем шаблон компонента для эффективного обновления
 		node._originalVnode = node._vnode;
@@ -188,9 +191,15 @@ function destroy(node) {
 	}
 }
 
-module.exports = {
+const vdom = {
 	Component,
 	create,
 	update,
 	destroy,
 };
+
+try {
+	module.exports = vdom;
+} catch (_) {
+	window.vdom = vdom;
+}

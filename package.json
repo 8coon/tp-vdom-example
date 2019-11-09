@@ -4,11 +4,13 @@
   "description": "Пример создания VirtualDOM",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "start": "http-server -p 6060 ./demo"
   },
   "author": "S.Peshkov",
   "license": "MIT",
   "devDependencies": {
+    "http-server": "^0.11.1",
     "jest": "^24.9.0"
   }
 }
