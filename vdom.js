@@ -70,6 +70,8 @@ function updateChildren(node, prevChildren, children) {
 			// Ключи совпадают -- можем обновить оптимально
 			update(node.childNodes[i], vchild);
 		} else {
+			// Удаляем старую ноду
+			destroy(prevVchild);
 			// Если строка превращается в элемент или наоборот
 			// Либо у элементов не совпали ключи
 			// Вставляем новую ноду перед текущей, старая нода при этом "всптывает" в конец
@@ -95,7 +97,18 @@ function update(node, vnode) {
 	return node;
 }
 
+function destroy(node) {
+	const vnode = node._vnode;
+
+	if (vnode && vnode.children) {
+		for (const child of vnode.children) {
+			destroy(child);
+		}
+	}
+}
+
 module.exports = {
 	create,
 	update,
+	destroy,
 };
