@@ -212,8 +212,8 @@ describe('vdom', () => {
 				expect(vdom.update(node, {
 					tag: 'DIV',
 					children: [
-						{tag: 'B', attrs: {B: 'B'}, key: 'B'},
-						{tag: 'I', attrs: {A: 'A'}, key: 'A'},
+						{tag: 'B', attrs: {B: 'B'}, key: 'C'},
+						{tag: 'I', attrs: {A: 'A'}, key: 'D'},
 					]
 				})).toMatchSnapshot();
 			});

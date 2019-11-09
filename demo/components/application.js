@@ -17,7 +17,6 @@ export class Application extends window.vdom.Component {
 	}
 
 	handleOutsideClick(event) {
-		console.log(event.defaultPrevented);
 		if (event.defaultPrevented) {
 			return;
 		}

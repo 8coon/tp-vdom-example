@@ -71,7 +71,7 @@ export class Toolbar extends window.vdom.Component {
 					attrs: {ref: 'btn-down', text: 'Вниз'},
 					key: 'btn-down',
 				})
-			].filter(child => child !== undefined)
+			].filter(child => child)
 		}
 	}
 }

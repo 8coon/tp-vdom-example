@@ -108,8 +108,8 @@ function updateAttrs(node, prevAttrs, attrs) {
 function updateChildren(node, prevChildren, children) {
 	const childLength = children ? children.length : 0;
 
-	for (let i = 0; i < childLength; i++) {
-		const prevVchild = prevChildren && prevChildren[i];
+	for (let i = 0, j = 0; i < childLength; i++, j++) {
+		const prevVchild = prevChildren && prevChildren[j];
 		const vchild = children[i];
 
 		const fromString = typeof prevVchild === 'string';
@@ -128,14 +128,12 @@ function updateChildren(node, prevChildren, children) {
 			// Ключи совпадают -- можем обновить оптимально
 			update(node.childNodes[i], vchild);
 		} else {
-			// Удаляем старую ноду
-			if (i < node.childNodes.length) {
-				destroy(node.childNodes[i]);
-			}
 			// Если строка превращается в элемент или наоборот
 			// Либо у элементов не совпали ключи
 			// Вставляем новую ноду перед текущей, старая нода при этом "всптывает" в конец
 			node.insertBefore(create(vchild), node.childNodes[i]);
+			// Сдвигаем индекс сравнения массива старых чайлдов
+			j--;
 		}
 	}
 
@@ -143,6 +141,7 @@ function updateChildren(node, prevChildren, children) {
 
 	// Удаляем "лишние" узлы
 	for (let i = childLength; i < curChildLength; i++) {
+		destroy(node.childNodes[childLength]);
 		node.removeChild(node.childNodes[childLength]);
 	}
 }
@@ -164,6 +163,8 @@ function update(node, vnode) {
 		resultVnode._instance = prevVnode._instance;
 		// Дальше сравнивать будет именно со старым vdom шаблона, а не компонента
 		prevVnode = node._originalVnode;
+		// Обновляем шаблон компонента
+		node._originalVnode = vnode;
 	}
 
 	updateAttrs(node, prevVnode.attrs, vnode.attrs);
