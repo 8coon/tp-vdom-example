@@ -201,5 +201,6 @@ const vdom = {
 try {
 	module.exports = vdom;
 } catch (_) {
+	/* istanbul ignore next */
 	window.vdom = vdom;
 }
