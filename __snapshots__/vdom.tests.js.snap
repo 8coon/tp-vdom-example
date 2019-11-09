@@ -17,3 +17,94 @@ exports[`vdom create Создаёт один элемент с двумя дет
 `;
 
 exports[`vdom create Создаёт одну текстовую ноду 1`] = `It works!`;
+
+exports[`vdom update attrs Обновляет атрибуты 0 -> 2 1`] = `
+<div
+  style="background-color: black;"
+  tab-index="2"
+/>
+`;
+
+exports[`vdom update attrs Обновляет атрибуты 1 -> 2 1`] = `
+<div
+  style="background-color: black;"
+  tab-index="2"
+/>
+`;
+
+exports[`vdom update attrs Обновляет атрибуты 2 -> 0 1`] = `<div />`;
+
+exports[`vdom update attrs Обновляет атрибуты 2 -> 1 1`] = `
+<div
+  style="background-color: black;"
+/>
+`;
+
+exports[`vdom update attrs Обновляет атрибуты 2 -> 2 1`] = `
+<div
+  style="background-color: black;"
+  tab-index="2"
+/>
+`;
+
+exports[`vdom update children Обновляет детей 0 -> 2 1`] = `
+<div>
+  <b
+    a="A"
+  />
+  <i
+    b="B"
+  />
+</div>
+`;
+
+exports[`vdom update children Обновляет детей 1 -> 1 1`] = `
+<div>
+  <span />
+</div>
+`;
+
+exports[`vdom update children Обновляет детей 1 -> 1 разные ключи 1`] = `
+<div>
+  <b />
+</div>
+`;
+
+exports[`vdom update children Обновляет детей 1 -> 1 разные типы 1`] = `
+<div>
+  Some text
+</div>
+`;
+
+exports[`vdom update children Обновляет детей 2 -> 0 1`] = `<div />`;
+
+exports[`vdom update children Обновляет детей 2 -> 2 1`] = `
+<div>
+  <span
+    disabled="disabled"
+  />
+  Some text updated
+</div>
+`;
+
+exports[`vdom update children Обновляет детей 2 -> 2 разные ключи 1`] = `
+<div>
+  <b
+    b="B"
+  />
+  <i
+    a="A"
+  />
+</div>
+`;
+
+exports[`vdom update children Обновляет детей 2 -> 2 разные типы 1`] = `
+<div>
+  Some text updated
+  <span
+    disabled="disabled"
+  />
+</div>
+`;
+
+exports[`vdom update Обновляет один элемент 1`] = `<div />`;
