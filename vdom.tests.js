@@ -246,10 +246,77 @@ describe('vdom', () => {
 				})).toMatchSnapshot();
 			});
 		});
+	});
 
-		test('Обновляет один элемент', () => {
-			const node = vdom.create({tag: 'DIV'});
-			expect(vdom.update(node, {tag: 'DIV'})).toMatchSnapshot();
+	describe('components', () => {
+		test('Отображает компонент', () => {
+			class Test extends vdom.Component {
+				render() {
+					return {tag: 'div'}
+				}
+			}
+
+			const node = vdom.create({tag: Test});
+			expect(node).toMatchSnapshot();
+		});
+
+		test('Обновляет компонент с атрибутом', () => {
+			class Test extends vdom.Component {
+				render() {
+					return {
+						tag: 'div',
+						children: [this.attrs.text]
+					}
+				}
+			}
+
+			const node = vdom.create({tag: Test, attrs: {text: 'Some text'}});
+			expect(node).toMatchSnapshot();
+
+			vdom.update(node, {attrs: {text: 'Some text updated'}});
+			expect(node).toMatchSnapshot();
+		});
+
+		test('Обновляет вложенные компоненты', () => {
+			class Child extends vdom.Component {
+				render() {
+					return {
+						tag: 'span',
+						children: [this.attrs.text]
+					}
+				}
+			}
+
+			class Parent extends vdom.Component {
+				render() {
+					return {
+						tag: 'div',
+						children: [{
+							tag: Child,
+							attrs: {text: `Enough of ${this.attrs.text}`},
+							key: `child-key-${this.attrs.key}`
+						}]
+					}
+				}
+			}
+
+			const node = vdom.create({
+				tag: Parent,
+				attrs: {text: 'Some text', key: '1'}
+			});
+			expect(node).toMatchSnapshot();
+
+			vdom.update(node, {
+				tag: Parent,
+				attrs: {text: 'Some text updated', key: '1'}
+			});
+			expect(node).toMatchSnapshot();
+
+			vdom.update(node, {
+				tag: Parent,
+				attrs: {text: 'Some text other key', key: '2'}
+			});
+			expect(node).toMatchSnapshot();
 		});
 	});
 

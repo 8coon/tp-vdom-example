@@ -1,8 +1,38 @@
 
+class Component {
+	constructor(attrs, children) {
+		this.update(attrs, children);
+	}
+
+	update(attrs, children) {
+		this.attrs = attrs;
+		this.children = children;
+	}
+}
+
 function create(vnode) {
 	// Если создаём текстовый узел
 	if (typeof vnode === 'string') {
 		return document.createTextNode(vnode);
+	}
+
+	// Если создаём компонент
+	if (typeof vnode.tag === 'function') {
+		// Создаём инстанс компонента
+		vnode._instance = new vnode.tag(vnode.attrs, vnode.children);
+		// Выполняем его шаблон
+		const componentVnode = vnode._instance.render();
+
+		// Создаём DOM по шаблону
+		const node = create(componentVnode);
+
+		// Сохраняем шаблон компонента для эффективного обновления
+		node._originalVnode = node._vnode;
+		// Записываем vdom инстанса компонента
+		node._vnode = vnode;
+		node._vnodeKey = vnode.key;
+
+		return node;
 	}
 
 	const node = document.createElement(vnode.tag);
@@ -71,7 +101,9 @@ function updateChildren(node, prevChildren, children) {
 			update(node.childNodes[i], vchild);
 		} else {
 			// Удаляем старую ноду
-			destroy(prevVchild);
+			if (prevVchild) {
+				destroy(prevVchild);
+			}
 			// Если строка превращается в элемент или наоборот
 			// Либо у элементов не совпали ключи
 			// Вставляем новую ноду перед текущей, старая нода при этом "всптывает" в конец
@@ -88,11 +120,26 @@ function updateChildren(node, prevChildren, children) {
 }
 
 function update(node, vnode) {
-	updateAttrs(node, node._vnode.attrs, vnode.attrs);
-	updateChildren(node, node._vnode.children, vnode.children);
+	let prevVnode = node._vnode;
+	let resultVnode = vnode;
+
+	// Если обновляем компонент
+	if (typeof prevVnode.tag === 'function') {
+		// Прокидываем компоненту новые атрибуты и дочерние элементы, пришедшие сверху
+		prevVnode._instance.update(vnode.attrs, vnode.children);
+		// Выполняем шаблон компонента с новыми атрибутами
+		vnode = prevVnode._instance.render();
+		// Переносим инстанс со старой ноды на новую
+		resultVnode._instance = prevVnode._instance;
+		// Дальше сравнивать будет именно со старым vdom шаблона, а не компонента
+		prevVnode = node._originalVnode;
+	}
+
+	updateAttrs(node, prevVnode.attrs, vnode.attrs);
+	updateChildren(node, prevVnode.children, vnode.children);
 
 	// Обновлем связь с virtual DOM
-	node._vnode = vnode;
+	node._vnode = resultVnode;
 
 	return node;
 }
@@ -108,6 +155,7 @@ function destroy(node) {
 }
 
 module.exports = {
+	Component,
 	create,
 	update,
 	destroy,

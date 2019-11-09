@@ -1,5 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`vdom components Обновляет вложенные компоненты 1`] = `
+<div>
+  <span>
+    Enough of Some text
+  </span>
+</div>
+`;
+
+exports[`vdom components Обновляет вложенные компоненты 2`] = `
+<div>
+  <span>
+    Enough of Some text updated
+  </span>
+</div>
+`;
+
+exports[`vdom components Обновляет вложенные компоненты 3`] = `
+<div>
+  <span>
+    Enough of Some text other key
+  </span>
+</div>
+`;
+
+exports[`vdom components Обновляет компонент с атрибутом 1`] = `
+<div>
+  Some text
+</div>
+`;
+
+exports[`vdom components Обновляет компонент с атрибутом 2`] = `
+<div>
+  Some text updated
+</div>
+`;
+
+exports[`vdom components Отображает компонент 1`] = `<div />`;
+
 exports[`vdom create Создаёт один элемент 1`] = `<div />`;
 
 exports[`vdom create Создаёт один элемент с двумя атрибутами 1`] = `
@@ -106,5 +144,3 @@ exports[`vdom update children Обновляет детей 2 -> 2 разные 
   />
 </div>
 `;
-
-exports[`vdom update Обновляет один элемент 1`] = `<div />`;
