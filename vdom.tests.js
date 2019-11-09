@@ -249,8 +249,34 @@ describe('vdom', () => {
 	});
 
 	describe('components', () => {
+		function createLoggingComponentClass(log = [], prefix = '') {
+
+			class LoggingComponent extends vdom.Component {
+				didCreate() {
+					super.didCreate();
+					log.push(prefix + 'didCreate');
+				}
+				willUpdate(attrs, children) {
+					super.willUpdate(attrs, children);
+					log.push(prefix + 'willUpdate');
+				}
+				didUpdate() {
+					super.didUpdate();
+					log.push(prefix + 'didUpdate');
+				}
+				willDestroy() {
+					super.willDestroy();
+					log.push(prefix + 'willDestroy');
+				}
+			}
+
+			return [LoggingComponent, log];
+		}
+
 		test('Отображает компонент', () => {
-			class Test extends vdom.Component {
+			const [LoggingComponent, log] = createLoggingComponentClass();
+
+			class Test extends LoggingComponent {
 				render() {
 					return {tag: 'div'}
 				}
@@ -258,10 +284,15 @@ describe('vdom', () => {
 
 			const node = vdom.create({tag: Test});
 			expect(node).toMatchSnapshot();
+
+			vdom.destroy(node);
+			expect(log).toMatchSnapshot();
 		});
 
 		test('Обновляет компонент с атрибутом', () => {
-			class Test extends vdom.Component {
+			const [LoggingComponent, log] = createLoggingComponentClass();
+
+			class Test extends LoggingComponent {
 				render() {
 					return {
 						tag: 'div',
@@ -275,10 +306,16 @@ describe('vdom', () => {
 
 			vdom.update(node, {attrs: {text: 'Some text updated'}});
 			expect(node).toMatchSnapshot();
+
+			vdom.destroy(node);
+			expect(log).toMatchSnapshot();
 		});
 
 		test('Обновляет вложенные компоненты', () => {
-			class Child extends vdom.Component {
+			const [LoggingParent, log] = createLoggingComponentClass();
+			const [LoggingChild] = createLoggingComponentClass(log, 'child ');
+
+			class Child extends LoggingChild {
 				render() {
 					return {
 						tag: 'span',
@@ -287,7 +324,7 @@ describe('vdom', () => {
 				}
 			}
 
-			class Parent extends vdom.Component {
+			class Parent extends LoggingParent {
 				render() {
 					return {
 						tag: 'div',
@@ -317,6 +354,9 @@ describe('vdom', () => {
 				attrs: {text: 'Some text other key', key: '2'}
 			});
 			expect(node).toMatchSnapshot();
+
+			vdom.destroy(node);
+			expect(log).toMatchSnapshot();
 		});
 	});
 

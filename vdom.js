@@ -1,13 +1,32 @@
 
 class Component {
 	constructor(attrs, children) {
-		this.update(attrs, children);
-	}
-
-	update(attrs, children) {
 		this.attrs = attrs;
 		this.children = children;
 	}
+
+	/**
+	 * Вызывается после создания компонента
+	 */
+	didCreate() {}
+
+	/**
+	 * Вызывается перед обновлением компонента
+	 */
+	willUpdate(attrs, children) {
+		this.attrs = attrs;
+		this.children = children;
+	}
+
+	/**
+	 * Вызывается после обновления компонента
+	 */
+	didUpdate() {}
+
+	/**
+	 * Вызывается перед уничтожением компонента
+	 */
+	willDestroy() {}
 }
 
 function create(vnode) {
@@ -31,6 +50,9 @@ function create(vnode) {
 		// Записываем vdom инстанса компонента
 		node._vnode = vnode;
 		node._vnodeKey = vnode.key;
+
+		// Вызываем метод жизненного цикла
+		vnode._instance.didCreate();
 
 		return node;
 	}
@@ -101,8 +123,8 @@ function updateChildren(node, prevChildren, children) {
 			update(node.childNodes[i], vchild);
 		} else {
 			// Удаляем старую ноду
-			if (prevVchild) {
-				destroy(prevVchild);
+			if (i < node.childNodes.length) {
+				destroy(node.childNodes[i]);
 			}
 			// Если строка превращается в элемент или наоборот
 			// Либо у элементов не совпали ключи
@@ -122,11 +144,12 @@ function updateChildren(node, prevChildren, children) {
 function update(node, vnode) {
 	let prevVnode = node._vnode;
 	let resultVnode = vnode;
+	const isComponent = typeof prevVnode.tag === 'function';
 
 	// Если обновляем компонент
-	if (typeof prevVnode.tag === 'function') {
+	if (isComponent) {
 		// Прокидываем компоненту новые атрибуты и дочерние элементы, пришедшие сверху
-		prevVnode._instance.update(vnode.attrs, vnode.children);
+		prevVnode._instance.willUpdate(vnode.attrs, vnode.children);
 		// Выполняем шаблон компонента с новыми атрибутами
 		vnode = prevVnode._instance.render();
 		// Переносим инстанс со старой ноды на новую
@@ -141,14 +164,25 @@ function update(node, vnode) {
 	// Обновлем связь с virtual DOM
 	node._vnode = resultVnode;
 
+	// Вызываем метод жизненного цикла компонента
+	if (isComponent) {
+		resultVnode._instance.didUpdate();
+	}
+
 	return node;
 }
 
 function destroy(node) {
 	const vnode = node._vnode;
 
-	if (vnode && vnode.children) {
-		for (const child of vnode.children) {
+	if (vnode) {
+		// Если удаляем компонент, вызовем метод жизненного цикла
+		if (typeof vnode.tag === 'function') {
+			vnode._instance.willDestroy();
+		}
+
+		// Удаляем детей
+		for (const child of node.childNodes) {
 			destroy(child);
 		}
 	}

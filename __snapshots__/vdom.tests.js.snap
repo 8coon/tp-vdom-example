@@ -24,6 +24,23 @@ exports[`vdom components Обновляет вложенные компонен�
 </div>
 `;
 
+exports[`vdom components Обновляет вложенные компоненты 4`] = `
+Array [
+  "child didCreate",
+  "didCreate",
+  "willUpdate",
+  "child willUpdate",
+  "child didUpdate",
+  "didUpdate",
+  "willUpdate",
+  "child willDestroy",
+  "child didCreate",
+  "didUpdate",
+  "willDestroy",
+  "child willDestroy",
+]
+`;
+
 exports[`vdom components Обновляет компонент с атрибутом 1`] = `
 <div>
   Some text
@@ -36,7 +53,22 @@ exports[`vdom components Обновляет компонент с атрибут
 </div>
 `;
 
+exports[`vdom components Обновляет компонент с атрибутом 3`] = `
+Array [
+  "didCreate",
+  "willUpdate",
+  "didUpdate",
+]
+`;
+
 exports[`vdom components Отображает компонент 1`] = `<div />`;
+
+exports[`vdom components Отображает компонент 2`] = `
+Array [
+  "didCreate",
+  "willDestroy",
+]
+`;
 
 exports[`vdom create Создаёт один элемент 1`] = `<div />`;
 
