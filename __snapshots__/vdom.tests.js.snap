@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`vdom create Создаёт один элемент 1`] = `<div />`;
+
+exports[`vdom create Создаёт один элемент с двумя атрибутами 1`] = `
+<div
+  style="background-color: red;"
+  tab-index="0"
+/>
+`;
+
+exports[`vdom create Создаёт один элемент с двумя детьми 1`] = `
+<div>
+  <span />
+  Some text
+</div>
+`;
+
+exports[`vdom create Создаёт одну текстовую ноду 1`] = `It works!`;
