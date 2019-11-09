@@ -38,6 +38,8 @@ function create(vnode) {
 
 	// Если создаём компонент
 	if (typeof vnode.tag === 'function') {
+		console.groupCollapsed(`${vnode.tag.name}: create`);
+
 		// Создаём инстанс компонента
 		vnode._instance = new vnode.tag(vnode.attrs, vnode.children);
 		// Выполняем его шаблон
@@ -57,6 +59,7 @@ function create(vnode) {
 		// Вызываем метод жизненного цикла
 		vnode._instance.didCreate();
 
+		console.groupEnd();
 		return node;
 	}
 
@@ -151,6 +154,8 @@ function update(node, vnode) {
 
 	// Если обновляем компонент
 	if (isComponent) {
+		console.groupCollapsed(`${prevVnode.tag.name}: update`);
+
 		// Прокидываем компоненту новые атрибуты и дочерние элементы, пришедшие сверху
 		prevVnode._instance.willUpdate(vnode.attrs, vnode.children);
 		// Выполняем шаблон компонента с новыми атрибутами
@@ -170,6 +175,8 @@ function update(node, vnode) {
 	// Вызываем метод жизненного цикла компонента
 	if (isComponent) {
 		resultVnode._instance.didUpdate();
+
+		console.groupEnd();
 	}
 
 	return node;
@@ -179,14 +186,22 @@ function destroy(node) {
 	const vnode = node._vnode;
 
 	if (vnode) {
+		const isComponent = typeof vnode.tag === 'function';
+
 		// Если удаляем компонент, вызовем метод жизненного цикла
-		if (typeof vnode.tag === 'function') {
+		if (isComponent) {
+			console.groupCollapsed(`${vnode.tag.name}: destroy`);
 			vnode._instance.willDestroy();
 		}
 
 		// Удаляем детей
 		for (const child of node.childNodes) {
 			destroy(child);
+		}
+
+		// Не забываем закрывать группу
+		if (isComponent) {
+			console.groupEnd();
 		}
 	}
 }
