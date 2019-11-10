@@ -54,7 +54,6 @@ function create(vnode) {
 		node._originalVnode = node._vnode;
 		// Записываем vdom инстанса компонента
 		node._vnode = vnode;
-		node._vnodeKey = vnode.key;
 
 		// Вызываем метод жизненного цикла
 		vnode._instance.didCreate();
@@ -81,8 +80,6 @@ function create(vnode) {
 
 	// Связываем виртуальный и реальный DOM
 	node._vnode = vnode;
-	// Переносим ключ для оптимизации сравнения при обновлении родителя
-	node._vnodeKey = vnode.key;
 
 	return node;
 }
