@@ -3,9 +3,9 @@ import {Application} from './components/application.js';
 
 const store = new TodoStore();
 
-store.add('lol');
-store.add('kek');
-store.add('cheburek');
+store.add('Изучить JavaScript');
+store.add('Сходить за хлебом');
+store.add('Понять Virtual DOM');
 
 const node = window.vdom.create({
 	tag: Application,
