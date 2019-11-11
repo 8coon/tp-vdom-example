@@ -82,7 +82,7 @@ export class Button extends vdom.Component {
 
     /**
      * TODO: Вызывать этот метод после вставки корневой DOM-ноды на страницу
-     **/*
+     **/
     /* didMount() {
     } */
 
