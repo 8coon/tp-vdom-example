@@ -7,7 +7,7 @@
 Для установки нужна относительно "свежая" версия NodeJS. Например, 12.
 
 ```bash
-git clone [https://github.com/8coon/tp-vdom-example.git](https://github.com/8coon/tp-vdom-example.git)
+git clone https://github.com/8coon/tp-vdom-example.git
 cd ./tp-vdom-example
 npm i
 ```
